@@ -10,7 +10,7 @@ var rad2deg = function (rad) {
 };
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color( 0x444444 );
+scene.background = new THREE.Color( 0x555555 );
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 const renderer = new THREE.WebGLRenderer();
@@ -52,8 +52,8 @@ function drawCircle(scene) {
 	const radius = 10;
 	const height = 10;
 	const segmentAngle = 1;
-	const faultAzimuth = 45;
-	const faultAngle = 30;
+	const faultAzimuth = 0;
+	const faultAngle = 45;
 	let segments = 360 / segmentAngle;
 	let verticesCount = 3 * 3 * segments;
 	const vertices = new Float32Array(verticesCount);
@@ -63,18 +63,23 @@ function drawCircle(scene) {
 	for (let segment = 0; segment < segments; segment++) {
 		let angle = segment * segmentAngle;
 
-		console.log(angle, Math.cos(deg2rad(angle)), Math.sin(deg2rad(angle)), Math.sin(deg2rad(faultAngle)) * radius);
+		console.log(
+			'angle:' + angle +
+			' cos(angle):' + Math.cos(deg2rad(angle)) +
+			' sin(angle):' + Math.sin(deg2rad(angle)) +
+			' sin(faultAngle):' + Math.sin(deg2rad(faultAngle))
+		);
 
 		const lineGeometry = new THREE.BufferGeometry().setFromPoints([
 			new THREE.Vector3(
-				Math.cos(deg2rad(angle)) * radius,
-				height + Math.cos(deg2rad(angle - faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)) * radius,
-				Math.sin(deg2rad(angle)) * radius
+				Math.cos(deg2rad(angle)) * radius * Math.cos(deg2rad(faultAngle)),
+				height + radius * Math.cos(deg2rad(angle - faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)),
+				Math.sin(deg2rad(angle)) * radius * Math.cos(deg2rad(faultAngle))
 			),
 			new THREE.Vector3(
-				Math.cos(deg2rad(angle + segmentAngle)) * radius,
-				height + Math.cos(deg2rad(angle + segmentAngle - faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)) * radius,
-				Math.sin(deg2rad(angle + segmentAngle)) * radius
+				Math.cos(deg2rad(angle + segmentAngle)) * radius * Math.cos(deg2rad(faultAngle)),
+				height + radius * Math.cos(deg2rad(angle + segmentAngle - faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)),
+				Math.sin(deg2rad(angle + segmentAngle)) * radius * Math.cos(deg2rad(faultAngle))
 			)
 		]);
 
@@ -89,9 +94,9 @@ function drawCircle(scene) {
 			0
 		),
 		new THREE.Vector3(
-			Math.cos(deg2rad(faultAzimuth)) * radius,
-			height,
-			Math.sin(deg2rad(faultAzimuth)) * radius
+			Math.cos(deg2rad(faultAzimuth)) * radius * Math.cos(deg2rad(faultAngle)),
+			height + radius * Math.cos(deg2rad(faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)),
+			Math.sin(deg2rad(faultAzimuth)) * radius * Math.cos(deg2rad(faultAngle))
 		)
 	]);
 
