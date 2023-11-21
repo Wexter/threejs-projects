@@ -12,14 +12,15 @@ var rad2deg = function (rad) {
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0x555555 );
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+// const camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+camera.position.x = 15;
+camera.position.z = 15;
+camera.position.y = 15;
+
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-
-camera.position.x = 20
-camera.position.z = 20;
-camera.position.y = 10;
 
 const orbit = new OrbitControls( camera, renderer.domElement );
 
@@ -28,17 +29,17 @@ const lineXMaterial = new THREE.LineBasicMaterial( { color: 0xff0000 } ),
 	lineZMaterial  = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 
 const lineXGeometry = new THREE.BufferGeometry().setFromPoints([
-	new THREE.Vector3( 0, 0, 0 ),
+	new THREE.Vector3( -20, 0, 0 ),
 	new THREE.Vector3( 20, 0, 0 )
 ]);
 
 const lineYGeometry = new THREE.BufferGeometry().setFromPoints([
-	new THREE.Vector3( 0, 0, 0 ),
+	new THREE.Vector3( 0, -20, 0 ),
 	new THREE.Vector3( 0, 20, 0 )
 ]);
 
 const lineZGeometry = new THREE.BufferGeometry().setFromPoints([
-	new THREE.Vector3( 0, 0, 0 ),
+	new THREE.Vector3( 0, 0, -20 ),
 	new THREE.Vector3( 0, 0, 20 )
 ]);
 
@@ -52,13 +53,15 @@ function drawCircle(scene) {
 	const radius = 10;
 	const height = 10;
 	const segmentAngle = 1;
-	const faultAzimuth = 45;
+	const faultAzimuth = 180;
 	const faultAngle = 45;
 	let segments = 360 / segmentAngle;
 	let verticesCount = 3 * 3 * segments;
 	const vertices = new Float32Array(verticesCount);
 
 	const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffff00 } );
+
+	let geometryPoints = [];
 
 	for (let segment = 0; segment < segments; segment++) {
 		let angle = segment * segmentAngle;
@@ -71,23 +74,24 @@ function drawCircle(scene) {
 			' cos(faultAngle):' + Math.cos(deg2rad(faultAngle))
 		);
 
-		const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+		geometryPoints.push(
 			new THREE.Vector3(
 				Math.cos(deg2rad(angle)) * radius * Math.cos(deg2rad(faultAngle)),
 				height + radius * Math.cos(deg2rad(angle - faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)),
 				Math.sin(deg2rad(angle)) * radius * Math.cos(deg2rad(faultAngle))
-			),
-			new THREE.Vector3(
-				Math.cos(deg2rad(angle + segmentAngle)) * radius * Math.cos(deg2rad(faultAngle)),
-				height + radius * Math.cos(deg2rad(angle + segmentAngle - faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)),
-				Math.sin(deg2rad(angle + segmentAngle)) * radius * Math.cos(deg2rad(faultAngle))
 			)
-		]);
-
-		const line = new THREE.Line( lineGeometry, lineMaterial );
-
-		scene.add(line);
+		);
 	}
+
+	geometryPoints.push(geometryPoints[0]);
+
+	console.log(geometryPoints);
+
+	const lineGeometry = new THREE.BufferGeometry().setFromPoints(geometryPoints);
+
+	const line = new THREE.Line( lineGeometry, lineMaterial );
+
+	scene.add(line);
 
 	const faultlineGeometry = new THREE.BufferGeometry().setFromPoints([
 		new THREE.Vector3(
