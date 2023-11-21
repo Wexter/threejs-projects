@@ -52,7 +52,7 @@ function drawCircle(scene) {
 	const radius = 10;
 	const height = 10;
 	const segmentAngle = 1;
-	const faultAzimuth = 0;
+	const faultAzimuth = 45;
 	const faultAngle = 45;
 	let segments = 360 / segmentAngle;
 	let verticesCount = 3 * 3 * segments;
@@ -67,7 +67,8 @@ function drawCircle(scene) {
 			'angle:' + angle +
 			' cos(angle):' + Math.cos(deg2rad(angle)) +
 			' sin(angle):' + Math.sin(deg2rad(angle)) +
-			' sin(faultAngle):' + Math.sin(deg2rad(faultAngle))
+			' sin(faultAngle):' + Math.sin(deg2rad(faultAngle)) +
+			' cos(faultAngle):' + Math.cos(deg2rad(faultAngle))
 		);
 
 		const lineGeometry = new THREE.BufferGeometry().setFromPoints([
@@ -84,6 +85,7 @@ function drawCircle(scene) {
 		]);
 
 		const line = new THREE.Line( lineGeometry, lineMaterial );
+
 		scene.add(line);
 	}
 
@@ -95,7 +97,7 @@ function drawCircle(scene) {
 		),
 		new THREE.Vector3(
 			Math.cos(deg2rad(faultAzimuth)) * radius * Math.cos(deg2rad(faultAngle)),
-			height + radius * Math.cos(deg2rad(faultAzimuth)) * -1 * Math.sin(deg2rad(faultAngle)),
+			height + radius * -1 * Math.sin(deg2rad(faultAngle)),
 			Math.sin(deg2rad(faultAzimuth)) * radius * Math.cos(deg2rad(faultAngle))
 		)
 	]);
