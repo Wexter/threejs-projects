@@ -52,7 +52,6 @@ const lineX = new THREE.Line( lineXGeometry, lineXMaterial ),
 
 scene.add(lineX).add(lineY).add(lineZ);
 
-
 const group = new THREE.Group();
 
 const geometry = new THREE.BufferGeometry();
@@ -66,25 +65,13 @@ group.add( new THREE.Mesh( geometry, meshMaterial ) );
 
 scene.add( group );
 
-// function updateGroupGeometry( mesh, geometry ) {
-
-// 	mesh.children[ 0 ].geometry.dispose();
-// 	mesh.children[ 1 ].geometry.dispose();
-
-// 	mesh.children[ 0 ].geometry = new THREE.WireframeGeometry( geometry );
-// 	mesh.children[ 1 ].geometry = geometry;
-
-// 	// these do not update nicely together if shared
-
-// }
-
 function drawCircle(mesh) {
 	const data = {
 		radius: 100,
 		height: 100,
 		segmentAngle: 1,
 		faultAzimuth: 0,
-		faultAngle: 45
+		faultAngle: 30
 	};
 
 	let line = null,
@@ -119,8 +106,6 @@ function drawCircle(mesh) {
 	
 		geometryPoints.push(geometryPoints[0]);
 	
-		// console.log(geometryPoints);
-
 		if (null !== line)
 			scene.remove(line);
 
@@ -159,20 +144,9 @@ function drawCircle(mesh) {
 	folder.add( data, 'faultAngle', -90, 90 ).onChange( generateGeometry );
 
 	generateGeometry();
-
-	// const squaregeometry = new THREE.BufferGeometry();
-	// // itemSize = 3 because there are 3 values (components) per vertex
-	// squaregeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-	// const squarematerial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 100 } );
-	// squarematerial.side = THREE.DoubleSide;
-	// const mesh = new THREE.Mesh( squaregeometry, squarematerial );
-	
-	// scene.add(mesh);
 }
 
 drawCircle(group);
-
-// drawCircle(scene);
 
 function animate() {
 	requestAnimationFrame( animate );
