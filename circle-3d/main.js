@@ -154,7 +154,7 @@ function drawCircle(mesh) {
 	
 	folder.add( data, 'radius', 1, 200 ).onChange( generateGeometry );
 	folder.add( data, 'height', 0, 200 ).step( 1 ).onChange( generateGeometry );
-	folder.add( data, 'segmentAngle', 1, 60 ).onChange( generateGeometry );
+	folder.add( data, 'segmentAngle', 0.1, 60 ).onChange( generateGeometry );
 	folder.add( data, 'faultAzimuth', 0, 360 ).onChange( generateGeometry );
 	folder.add( data, 'faultAngle', -90, 90 ).onChange( generateGeometry );
 
