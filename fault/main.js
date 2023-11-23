@@ -78,55 +78,17 @@ function drawCircle(mesh) {
 		faultline = null;
 
 	function generateGeometry() {
-		/*let segments = 360 / data.segmentAngle;
-
-		const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffff00 } );
-	
-		let geometryPoints = [];
-	
-		for (let segment = 0; segment < segments; segment++) {
-			let angle = segment * data.segmentAngle;
-	
-			// console.log(
-			// 	'angle:' + angle +
-			// 	' cos(angle):' + Math.cos(deg2rad(angle)) +
-			// 	' sin(angle):' + Math.sin(deg2rad(angle)) +
-			// 	' sin(dtilt):' + Math.sin(deg2rad(data.dtilt)) +
-			// 	' cos(dtilt):' + Math.cos(deg2rad(data.dtilt))
-			// );
-	
-			geometryPoints.push(
-				new THREE.Vector3(
-					Math.cos(deg2rad(angle)) * data.radius * Math.cos(deg2rad(data.dtilt)),
-					data.height + data.radius * Math.cos(deg2rad(angle - data.faultAzimuth)) * -1 * Math.sin(deg2rad(data.dtilt)),
-					Math.sin(deg2rad(angle)) * data.radius * Math.cos(deg2rad(data.dtilt))
-				)
-			);
-		}
-	
-		geometryPoints.push(geometryPoints[0]);
-	
-		if (null !== line)
-			scene.remove(line);
-
-		const lineGeometry = new THREE.BufferGeometry().setFromPoints(geometryPoints);
-	
-		line = new THREE.Line( lineGeometry, lineMaterial);
-		
-		scene.add(line);*/
-
 		if (null !== faultline)
 			scene.remove(faultline);
 
-		console.log(data.dtilt * Math.cos(deg2rad(data.angle - data.faultAzimuth)));
+		let tilt = data.dtilt * Math.cos(deg2rad(data.angle - data.faultAzimuth));
 
 		const faultlineGeometry = new THREE.BufferGeometry().setFromPoints([
 			new THREE.Vector3( 0, data.height, 0 ),
 			new THREE.Vector3(
-				/* Math.cos(deg2rad(data.faultAzimuth)) * */ data.radius * Math.cos(deg2rad(data.dtilt)),
-				data.height + data.radius * Math.sin(deg2rad(data.dtilt)) * Math.cos(deg2rad(data.angle - data.faultAzimuth)),
+				data.radius * Math.cos(deg2rad(tilt)),
+				data.height + data.radius * Math.sin(deg2rad(tilt)),
 				0
-				// Math.sin(deg2rad(data.faultAzimuth)) * data.radius * Math.cos(deg2rad(data.dtilt))
 			)
 		]);
 	
@@ -139,7 +101,6 @@ function drawCircle(mesh) {
 	folder.add( data, 'angle', 0, 360 ).onChange( generateGeometry );
 	folder.add( data, 'radius', 1, 200 ).onChange( generateGeometry );
 	folder.add( data, 'height', 0, 200 ).step( 1 ).onChange( generateGeometry );
-	// folder.add( data, 'segmentAngle', 0.1, 60 ).onChange( generateGeometry );
 	folder.add( data, 'faultAzimuth', 0, 360 ).onChange( generateGeometry );
 	folder.add( data, 'dtilt', -90, 90 ).onChange( generateGeometry );
 
